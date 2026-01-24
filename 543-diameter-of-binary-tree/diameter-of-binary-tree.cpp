@@ -29,5 +29,5 @@ public:
         int left_Right = getHeight(root->left) + getHeight(root->right);
         int diameter = max(leftDiameter, max(rightDiameter , left_Right));
         return diameter;
-        }
+    }
 };
