@@ -11,6 +11,13 @@
  */
 class Solution {
 public:
+    void createMapping(unordered_map<int,int>&valueToIndex,vector<int>&inorder){
+        for(int i = 0;i<inorder.size();i++){
+            int element = inorder[i];
+            int index = i;
+            valueToIndex[element] = index;
+        }
+    }
     int getIndexInorder(vector<int>&inorder ,int target){
         for(int i =0;i< inorder.size();i++){
             if(inorder[i] == target){
@@ -19,7 +26,7 @@ public:
         }
         return -1;
     }
-    TreeNode* ConstructTree(vector<int>&preorder ,vector<int>&inorder ,int &preorderIndex ,int inorderStart , int inorderEnd , int size){
+    TreeNode* ConstructTree(unordered_map<int,int>&valMap,vector<int>&preorder ,vector<int>&inorder ,int &preorderIndex ,int inorderStart , int inorderEnd , int size){
         if(preorderIndex >= size){
             return NULL;
         }
@@ -29,9 +36,10 @@ public:
         int element = preorder[preorderIndex];
         preorderIndex++;
         TreeNode* root = new TreeNode(element);
-        int elementIndexInsideInorder = getIndexInorder(inorder , element);
-        root->left = ConstructTree(preorder,inorder,preorderIndex ,inorderStart , elementIndexInsideInorder - 1,size);
-        root->right = ConstructTree(preorder,inorder,preorderIndex,elementIndexInsideInorder + 1,inorderEnd , size);
+        //int elementIndexInsideInorder = getIndexInorder(inorder , element);
+        int elementIndexInsideInorder =valMap[element];
+        root->left = ConstructTree(valMap,preorder,inorder,preorderIndex ,inorderStart , elementIndexInsideInorder - 1,size);
+        root->right = ConstructTree(valMap,preorder,inorder,preorderIndex,elementIndexInsideInorder + 1,inorderEnd , size);
         return root;
     }
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
@@ -39,7 +47,9 @@ public:
         int inorderStart = 0;
         int inorderEnd = inorder.size()-1;
         int size = inorder.size();
-        TreeNode* root = ConstructTree(preorder,inorder,preorderIndex,inorderStart,inorderEnd,size);
+        unordered_map<int,int>valMap;
+        createMapping(valMap,inorder);
+        TreeNode* root = ConstructTree(valMap,preorder,inorder,preorderIndex,inorderStart,inorderEnd,size);
         return root;
     }
 };
