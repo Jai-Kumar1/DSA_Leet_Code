@@ -33,7 +33,6 @@ public:
         root->left = createTree(valMap,inorder,postorder,postorderIndex,inorderStart ,elementIndexInsideInorder -1);
         
         return root;
-
     }
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
         int postorderIndex = postorder.size()-1;
